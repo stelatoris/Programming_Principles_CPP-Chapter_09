@@ -52,12 +52,17 @@ istream& operator>>(istream& is, Book& bb);
 
 //--------------------------------------------------------------------------------
 
-class Patron {
+class Patron { 
 public:
+	Patron(string name, int card_num, int fees);
+	Patron();		// default constructor
 
+	void get_user_name();
+	void get_card_num();
+	void get_fees();
 
 private:
-	string user_name;
-	int card_num;
-	int lib_fees;
+	string user_n;
+	int card_n;
+	int l_fees;
 };
