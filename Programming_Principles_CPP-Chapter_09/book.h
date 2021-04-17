@@ -52,17 +52,40 @@ istream& operator>>(istream& is, Book& bb);
 
 //--------------------------------------------------------------------------------
 
+class Patron_name {
+public:
+	Patron_name(string last_name, string initial_name);
+	Patron_name();
+
+	string last_name() const { return l_name; }
+	string initial_name() const { return i_name; }
+private:
+	string l_name;
+	string i_name;
+};
+
+
 class Patron { 
 public:
-	Patron(string name, int card_num, int fees);
+	Patron(Patron_name name, int card_num, int fees);
 	Patron();		// default constructor
 
-	void get_user_name();
-	void get_card_num();
-	void get_fees();
+	Patron_name name() const { return user_n; }
+	int card_num() const { return card_n; }
+	int fees() const { return l_fees; }
+
+	void set_fee(double fee);
+	void add_fee(double fee);
+
 
 private:
-	string user_n;
+	Patron_name user_n;
 	int card_n;
 	int l_fees;
 };
+
+ostream& operator<<(ostream& os, const Patron& p);
+ostream& operator<<(ostream& os, const Patron_name& pn);
+istream& operator>>(istream& is, Patron_name& pn);
+//--------------------------------------------------------------------------------
+

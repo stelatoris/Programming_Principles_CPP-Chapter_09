@@ -123,6 +123,57 @@ bool operator!=(const Book& a, const Book& b)
 }
 
 //--------------------------------------------------------------------------------
+// Patron_name Constructor
+Patron_name::Patron_name(string last_name, string initial_name)
+	: l_name{ last_name }, i_name{ initial_name }
+{
+}
+// Default Constructor
+Patron_name::Patron_name() : l_name{ "Surname" }, i_name{ "Name" }
+{
+}
+
+ostream& operator<<(ostream& os, const Patron_name& pn)
+{
+	return os << pn.last_name() << ", " << pn.initial_name() << ". ";
+}
+
+istream& operator>>(istream& is, Patron_name& pn)
+{
+	string last_name, initial_name;
+	char ch1;
+	is >> last_name >> ch1 >> initial_name;
+	if (!is) return is;
+	if (ch1 != ',') {
+		is.clear(ios_base::failbit);
+		return is;
+	}
+	pn = Patron_name(last_name, initial_name);
+	return is;
+}
+
+
+//--------------------------------------------------------------------------------
+// Patron Constructor
+Patron::Patron(Patron_name name, int card_num, int fees)
+	:user_n{ name }, card_n{ card_num }, l_fees{ fees }
+{
+}
+// Default Constructor
+Patron::Patron() : user_n{ Patron_name::Patron_name() }, card_n{ 0 }, l_fees{ 0 }
+{
+}
+
+ostream& operator<<(ostream& os, const Patron& p)
+{
+	return os << "Patron Name: " << p.name() << '\n'
+		<< "Card Number: " << p.card_num() << '\n'
+		<< "Outstanding Fees: " << p.fees() << '\n'
+		<< "---------------------------------\n";
+}
+
+//-------------------------------------------
+
 
 void Book::change_isbn(ISBN i)
 {
@@ -137,6 +188,16 @@ void Book::change_title(string s)
 void Book::change_author(string s)
 {
 	a = s;
+}
+
+void Patron::set_fee(double fee)	//sets initial fee
+{
+	l_fees = fee;
+}
+
+void Patron::add_fee(double fee)	// add fees to account
+{
+	l_fees += fee;
 }
 
 
