@@ -1,6 +1,7 @@
 #include "std_lib_facilities.h"
 #include "book.h"
 
+
 //--------------------------------------------------------------------------------
 // Genre class
 vector<string>genre_tbl = {
@@ -155,7 +156,7 @@ istream& operator>>(istream& is, Patron_name& pn)
 
 //--------------------------------------------------------------------------------
 // Patron Constructor
-Patron::Patron(Patron_name name, int card_num, int fees)
+Patron::Patron(Patron_name name, int card_num, double fees)
 	:user_n{ name }, card_n{ card_num }, l_fees{ fees }
 {
 }
@@ -173,7 +174,16 @@ ostream& operator<<(ostream& os, const Patron& p)
 }
 
 //-------------------------------------------
+//Transaction constructor
+Library::Transaction::Transaction(Book book, Patron patron, Chrono::Date date)
+	:trans_book{ book }, trans_patron{ patron }, trans_date{ date }
+{
+}
 
+// Default Constructor
+//Library::Transaction::Transaction() : trans_book{ Book::Book() }, trans_patron{ Patron::Patron()}, trans_date{ Chrono::Date() }
+//{
+//}
 
 void Book::change_isbn(ISBN i)
 {
@@ -199,5 +209,12 @@ void Patron::add_fee(double fee)	// add fees to account
 {
 	l_fees += fee;
 }
+
+bool Patron::check_fees()
+{
+	if (l_fees > 0) return true;
+	else return false;
+}
+
 
 

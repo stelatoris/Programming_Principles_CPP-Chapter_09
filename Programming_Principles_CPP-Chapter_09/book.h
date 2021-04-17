@@ -1,4 +1,5 @@
 // book.h
+#include "Chrono.h"
 
 //--------------------------------------------------------------------------------
 
@@ -67,13 +68,15 @@ private:
 
 class Patron { 
 public:
-	Patron(Patron_name name, int card_num, int fees);
+	Patron(Patron_name name, int card_num, double fees);
 	Patron();		// default constructor
 
 	Patron_name name() const { return user_n; }
 	int card_num() const { return card_n; }
-	int fees() const { return l_fees; }
-
+	double fees() const { return l_fees; }
+	
+	bool check_fees();
+	
 	void set_fee(double fee);
 	void add_fee(double fee);
 
@@ -81,11 +84,35 @@ public:
 private:
 	Patron_name user_n;
 	int card_n;
-	int l_fees;
+	double l_fees;
 };
 
 ostream& operator<<(ostream& os, const Patron& p);
 ostream& operator<<(ostream& os, const Patron_name& pn);
 istream& operator>>(istream& is, Patron_name& pn);
+
 //--------------------------------------------------------------------------------
 
+class Library {
+public:
+
+	struct Transaction {		
+
+		Book trans_book;
+		Patron trans_patron;
+		Chrono::Date trans_date;
+
+		Transaction(Book book, Patron patron, Chrono::Date date);
+		Transaction();
+	};
+
+	void add_book();
+
+private:
+	vector<Book>books;
+	vector<Patron>patrons;
+	vector<Transaction>transactions;
+	
+};
+
+//--------------------------------------------------------------------------------

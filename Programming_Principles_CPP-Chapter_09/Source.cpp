@@ -11,6 +11,7 @@ x is a digit or a letter.Store an ISBN as a string.
 #include "std_lib_facilities.h"
 #include "book.h"
 
+
 int main()
 try {
 	
@@ -28,6 +29,23 @@ try {
 	book1.change_isbn({ 1, 2, 3, 'x' });
 
 	cout << book1;
+
+	Patron member1{ {"Zraikat","Hasan"},14855915,0 };
+
+	cout << member1;
+
+	int boolcheck = 0;
+	boolcheck=member1.check_fees();
+	cout << "bool fees:" << boolcheck << "\n\n";
+
+	member1.add_fee(10);
+	boolcheck=member1.check_fees();
+	
+	cout << member1;
+
+	cout << "bool fees:" << boolcheck << "\n\n";
+
+
 
 }
 

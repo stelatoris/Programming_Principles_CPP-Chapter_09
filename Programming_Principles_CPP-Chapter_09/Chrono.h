@@ -1,163 +1,79 @@
 #include "std_lib_facilities.h"
 
+
 namespace Chrono {
 
-    //------------------------------------------------------------------------------
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+// Month
+    enum class Month {
+        jan=1, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec
+    };
 
+    const vector<string> Month_tbl { "unused",              // burn 0 index
+        "January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"
+    };
+
+    Month operator++(Month& m);
+
+    ostream& operator<<(ostream& os, const Month& m);
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+// Day
+
+    enum class Day {
+        sun, mon, tues, wed, thur, fri, sat
+    };
+
+    const vector<string> Day_tbl { "Sunday", "Monday", "Tuesday",
+        "Wednesday", "Thursday", "Friday", "Saturday"
+    };
+
+    Day operator++(Day& d);
+
+    ostream& operator<<(ostream& os, const Day& d);
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+// Date
     class Date {
-    public:
-        enum Month {
-            jan=1, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec
-        };
+        public:
+            class Invalid { };              // to throw as exception
 
-        class Invalid { };              // to throw as exception
+            Date(int y, Month m, int d);    // check for valid date and init
+            Date();                         // default constructor
+            // the default copy operations are fine
+            
+            // nonmodifying operations:
+            int     day()   const { return d; }
+            Month   month() const { return m; }
+            int     year()  const { return y; }
 
-        Date(int y, Month m, int d);    // check for valid date and initialize
-        Date();                         // default constructor
-        // the default copy operations are fine
-
-        // non-modifying operations:
-        int day() const { return d; }
-        Month month() const { return m; }
-        int year() const { return y; }
-
-        // modifying operations:
-        void add_day(int n);
-        void add_month(int n);
-        void add_year(int n);
-    private:
-        int y;
-        Month m;
-        int d;
+            // modifying operations
+            void add_day(int n);
+            void add_month(int n);
+            void add_year(int n);
+        private:
+            int     y;
+            Month   m;
+            int     d;
     };
 
-    //------------------------------------------------------------------------------
+    bool is_date(int y, Month m, int d);    // true for valid date
+    bool leapyear(int y);                   // true if y is a leapyear
+    int  days_in_month(int y, Month m);     // number of days in month
+    int  days_in_month(const Date& d);      // overload
 
-    bool is_date(int y, Date::Month m, int d);  // true for valid date
-
-    //------------------------------------------------------------------------------
-
-    bool leapyear(int y);                       // true if y is a leap year
-    int day_in_year(const Date& d);             // number of day in year
-    int n_leapyears(int y);                     // number of leap years between Jan 1 of year y and first_date
-    long int days_linear(const Date& d);        // days since first_date (day 0: Jan 1, 1970)
-
-    enum Day {
-        sunday, monday, tuesday, wednesday, thursday, friday, saturday
-    };
-    Day day_of_week(const Date& d);             // weekday of d
-    ostream& operator<<(ostream& os, Day d);
-
-    //------------------------------------------------------------------------------
+    Day  day_of_week(const Date& d);        // day of week of d
+    Date day_one(const Date& d);            // first day of first week (Sunday)
+    int  week_of_year(const Date& d);
 
     bool operator==(const Date& a, const Date& b);
     bool operator!=(const Date& a, const Date& b);
-
-    //------------------------------------------------------------------------------
+    bool operator<(const Date& a, const Date& b);
 
     ostream& operator<<(ostream& os, const Date& d);
     istream& operator>>(istream& is, Date& dd);
 
-    //------------------------------------------------------------------------------
-
-} // Chrono
-
-namespace Chrono974 {
-    // simple Date (use Month type)
-    class Date {
-    public:
-        enum Month {
-            jan=1, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec
-        };
-
-        // constructors
-        Date(int y, Month m, int d);    // check for valid date and initialise
-        Date();                         // default constructor
-
-        // const members: can't modify the object
-        int year() const;
-        Month month() const;
-        int day() const;
-
-        // non-const members
-        void add_year(int n);
-        void add_month(int n);
-        void add_day(int n);
-    private:
-        int y;      // year
-        Month m;
-        int d;      // day of month
-    };
-
-    // operators
-    ostream& operator<<(ostream& os, const Date& d);
-}   // Chrono974
-
-namespace Chrono971 {
-    // simple Date (use Month type)
-    class Date {
-    public:
-        enum Month {
-            jan=1, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec
-        };
-
-        Date(int y, Month m, int d);    // check for valid date and initialise
-        void add_day(int n);            // increase the Date by n days
-        int year() { return y; }
-        Month month() { return m; }
-        int day() { return d; }
-    private:
-        int y;      // year
-        Month m;
-        int d;      // day
-    };
-
-    // operators
-    ostream& operator<<(ostream& os, Date& d);  // Date& d not const on purpose
-}   // Chrono971
-
-namespace Chrono943 {
-    // simple Date (control access)
-    class Date {
-        int y, m, d;                // year,month,day
-    public:
-        Date(int y, int m, int d);  // check for valid date and initialise
-        void add_day(int n);        // increase the Date by n days
-        int year() { return y; }
-        int month() { return m; }
-        int day() { return d; }
-    };
-
-    // operators
-    ostream& operator<<(ostream& os, Date& d);  // Date& d not const on purpose
-}   // Chrono943
-
-namespace Chrono942 {
-    // simple Date
-    // guarantee initialisation with constructor
-    // provide some notational convenience
-    struct Date {
-        int y, m, d;                // year,month,day
-        Date(int y, int m, int d);  // check for valid date and initialise
-        void add_day(int n);        // increase the Date by n days
-    };
-
-    // operators
-    ostream& operator<<(ostream& os, const Date& d);
-}   // Chrono942
-
-namespace Chrono941 {
-    // simple Date
-    struct Date {
-        int y;  // year
-        int m;  // month in year
-        int d;  // day of month
-    };
-
-    // helper functions
-    void init_day(Date& dd, int y, int m, int d);
-    void add_day(Date& dd, int n);
-
-    // operators
-    ostream& operator<<(ostream& os, const Date& d);
-}   // Chrono941
+    Date next_sunday(Date d);               // next Sunday after d
+    Date next_weekday(Date d);              // next weekday after d
+}   // Chrono
