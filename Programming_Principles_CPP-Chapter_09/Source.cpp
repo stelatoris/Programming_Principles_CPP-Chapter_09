@@ -12,6 +12,8 @@ x is a digit or a letter.Store an ISBN as a string.
 #include "Chrono.h"
 #include "book.h"
 
+
+
 // prints out all the books in the library
 void print_book_list(const Library& lib)
 {
@@ -34,45 +36,75 @@ void print_patron_list(const Library& lib)
 	}
 }
 
+void test_library()
+{
+	// create library
+	Library test_lib;
+
+	Book book1(ISBN(9780, 1410, 3614, '4'),
+		"1984",
+		"George Orwell",
+		Genre::fiction,
+		false);
+	test_lib.add_book(book1);
+
+	Book book2(ISBN(9780,1410,3613,'7'),
+		"Animal Farm",
+		"George Orwell",
+		Genre::fiction,
+		false);
+	test_lib.add_book(book2);
+
+	Book book3(ISBN(9780,3161,1695,'4'),
+		"The Day the Universe Changed",
+		"James Burke",
+		Genre::nonfiction,
+		false);
+	test_lib.add_book(book3);
+
+	Book book4(ISBN(9780,1413,7114,'6'),
+		"The BFG",
+		"Roald Dahl",
+		Genre::children,
+		false);
+	test_lib.add_book(book4);
+
+	Book book5(ISBN(9780,3948,0001,'1'),
+		"The Cat in the Hat",
+		"Dr. Seuss",
+		Genre::children,
+		false);
+	test_lib.add_book(book5);
+
+	Book book6(ISBN(9781,2500,4072,'5'),
+		"Neil Armstrong: A Life of Flight",
+		"Jay Barbree ",
+		Genre::biography,
+		false);
+	test_lib.add_book(book6);
+
+	Book book7(ISBN(9781,4711,7787,'3'),
+		"First Man: The Life of Neil Armstrong",
+		"James Hansen",
+		Genre::biography,
+		false);
+	test_lib.add_book(book7);
+
+	Book book8(ISBN(000,720,354,'3'),
+		"	The Fellowship of the Ring : The Lord of the Rings, Book 1",
+		"John R. R. Tolkien",
+		Genre::fiction,
+		false);
+	test_lib.add_book(book8);
+
+	print_book_list(test_lib);
+}
+
 int main()
 try {
 	
-
-
-	Book book1;
-
-	cout << book1;
-
-	book1.change_title("1984");
-
+	test_library();
 	
-
-	book1.change_author("Orwell");
-	book1.change_isbn({ 11, 22, 33, 'x' });
-
-	
-
-	Patron member1{ {"Doe","John"},123456789,0 };
-
-	cout << member1;
-
-	int boolcheck = 0;
-	boolcheck=member1.check_fees();
-	cout << "bool fees:" << boolcheck << "\n\n";
-
-	member1.add_fee(10);
-	boolcheck=member1.check_fees();
-	
-	cout << member1;
-
-	cout << "bool fees:" << boolcheck << "\n\n";
-
-	Library lib1;
-
-	lib1.add_patron(member1);
-	lib1.add_book(book1);
-	print_book_list(lib1);
-	print_patron_list(lib1);
 
 
 }
