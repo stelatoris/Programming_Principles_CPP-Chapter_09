@@ -12,7 +12,27 @@ x is a digit or a letter.Store an ISBN as a string.
 #include "Chrono.h"
 #include "book.h"
 
+// prints out all the books in the library
+void print_book_list(const Library& lib)
+{
+	cout << "List of books registered in the library:\n"
+		<< "----------------------------------------\n";
+	for (int i = 0; i < lib.v_get_books().size(); ++i)
+	{
+		cout << lib.v_get_books()[i];
+	}
+}
 
+// prints out all the patrons in the library
+void print_patron_list(const Library& lib)
+{
+	cout << "List of patrons registered in the library:\n"
+		<< "----------------------------------------\n";
+	for (int i = 0; i < lib.v_get_patrons().size(); ++i)
+	{
+		cout << lib.v_get_patrons()[i];
+	}
+}
 
 int main()
 try {
@@ -49,13 +69,10 @@ try {
 
 	Library lib1;
 
+	lib1.add_patron(member1);
 	lib1.add_book(book1);
-	cout << "Printing below a book from the lib1 Library:\n ";
-
-	for (int i = 0; i < lib1.v_get_books().size(); ++i)
-	{
-		cout << lib1.v_get_books()[i];
-	}
+	print_book_list(lib1);
+	print_patron_list(lib1);
 
 
 }
