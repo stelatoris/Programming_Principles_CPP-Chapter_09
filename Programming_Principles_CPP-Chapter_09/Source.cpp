@@ -25,14 +25,14 @@ try {
 
 	book1.change_title("1984");
 
-	
+	cout << book1;
 
 	book1.change_author("Orwell");
 	book1.change_isbn({ 11, 22, 33, 'x' });
 
-	
+	cout << book1;
 
-	Patron member1{ {"Doe","John"},123456789,0 };
+	Patron member1{ {"Zraikat","Hasan"},14855915,0 };
 
 	cout << member1;
 
@@ -48,14 +48,6 @@ try {
 	cout << "bool fees:" << boolcheck << "\n\n";
 
 	Library lib1;
-
-	lib1.add_book(book1);
-	cout << "Printing below a book from the lib1 Library:\n ";
-
-	for (int i = 0; i < lib1.v_get_books().size(); ++i)
-	{
-		cout << lib1.v_get_books()[i];
-	}
 
 
 }

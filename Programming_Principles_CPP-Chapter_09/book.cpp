@@ -154,6 +154,7 @@ istream& operator>>(istream& is, Patron_name& pn)
 	return is;
 }
 
+
 //--------------------------------------------------------------------------------
 // Patron Constructor
 Patron::Patron(Patron_name name, int card_num, double fees)
@@ -174,42 +175,7 @@ ostream& operator<<(ostream& os, const Patron& p)
 }
 
 //-------------------------------------------
-//Transaction constructor
-Library::Transaction::Transaction(Book book, Patron patron, Chrono::Date date)
-	:trans_book{ book }, trans_patron{ patron }, trans_date{ date }
-{
-}
 
-// Transactiom Default Constructor
-Library::Transaction::Transaction() : trans_book{ Book::Book() }, trans_patron{ Patron::Patron() }, trans_date{ Chrono::Date() }
-{
-}
-
-// Library Constructor
-Library::Library(vector<Book>b, vector<Patron>p, vector<Transaction>t)
-	: books{ b }, patrons{ p }, transactions{ t }
-{
-}
-
-// Library Default Constructor
-const Library& default_library()
-{
-	vector<Book>books;
-	vector<Patron>patrons;
-	vector<Library::Transaction>transactions;
-
-	static Library lib{ books,patrons,transactions };
-	return lib;
-}
-
-Library::Library()
-	: books{ default_library().v_get_books() },
-	patrons{ default_library().v_get_patrons() },
-	transactions{ default_library().v_get_transactions() }
-{
-}
-
-//--------------------------------------------------------------------------------
 
 void Book::change_isbn(ISBN i)
 {
@@ -242,19 +208,20 @@ bool Patron::check_fees()
 	else return false;
 }
 
+//Transaction constructor
+Library::Transaction::Transaction(Book book, Patron patron, Chrono::Date date)
+	:trans_book{ book }, trans_patron{ patron }, trans_date{ date }
+{
+}
+
+// Default Constructor
+Library::Transaction::Transaction() : trans_book{ Book::Book() }, trans_patron{ Patron::Patron() }, trans_date{ Chrono::Date() }
+{
+}
+
 void Library::add_book(const Book& b)
 {
 	books.push_back(b);
-}
-
-void Library::add_patron(const Patron& p)
-{
-	patrons.push_back(p);
-}
-
-void Library::add_transaction(const Library::Transaction& t)
-{
-	transactions.push_back(t);
 }
 
 
