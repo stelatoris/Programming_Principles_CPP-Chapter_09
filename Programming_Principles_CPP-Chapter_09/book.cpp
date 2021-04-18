@@ -1,4 +1,5 @@
 #include "std_lib_facilities.h"
+#include "Chrono.h"
 #include "book.h"
 
 
@@ -174,16 +175,7 @@ ostream& operator<<(ostream& os, const Patron& p)
 }
 
 //-------------------------------------------
-//Transaction constructor
-Library::Transaction::Transaction(Book book, Patron patron, Chrono::Date date)
-	:trans_book{ book }, trans_patron{ patron }, trans_date{ date }
-{
-}
 
-// Default Constructor
-//Library::Transaction::Transaction() : trans_book{ Book::Book() }, trans_patron{ Patron::Patron()}, trans_date{ Chrono::Date() }
-//{
-//}
 
 void Book::change_isbn(ISBN i)
 {
@@ -214,6 +206,22 @@ bool Patron::check_fees()
 {
 	if (l_fees > 0) return true;
 	else return false;
+}
+
+//Transaction constructor
+Library::Transaction::Transaction(Book book, Patron patron, Chrono::Date date)
+	:trans_book{ book }, trans_patron{ patron }, trans_date{ date }
+{
+}
+
+// Default Constructor
+Library::Transaction::Transaction() : trans_book{ Book::Book() }, trans_patron{ Patron::Patron() }, trans_date{ Chrono::Date() }
+{
+}
+
+void Library::add_book(const Book& b)
+{
+	books.push_back(b);
 }
 
 

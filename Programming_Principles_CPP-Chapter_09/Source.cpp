@@ -9,7 +9,9 @@ x is a digit or a letter.Store an ISBN as a string.
 */
 
 #include "std_lib_facilities.h"
+#include "Chrono.h"
 #include "book.h"
+
 
 
 int main()
@@ -21,12 +23,12 @@ try {
 
 	cout << book1;
 
-	book1.change_title("blabla");
+	book1.change_title("1984");
 
 	cout << book1;
 
-	book1.change_author("Hasan");
-	book1.change_isbn({ 1, 2, 3, 'x' });
+	book1.change_author("Orwell");
+	book1.change_isbn({ 11, 22, 33, 'x' });
 
 	cout << book1;
 
@@ -45,6 +47,7 @@ try {
 
 	cout << "bool fees:" << boolcheck << "\n\n";
 
+	Library lib1;
 
 
 }

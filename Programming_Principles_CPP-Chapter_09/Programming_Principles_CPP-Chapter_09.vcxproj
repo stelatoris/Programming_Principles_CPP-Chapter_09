@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="book.cpp" />
+    <ClCompile Include="Chrono.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="book.h" />
+    <ClInclude Include="Chrono.h" />
     <ClInclude Include="std_lib_facilities.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

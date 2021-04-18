@@ -1,5 +1,5 @@
 // book.h
-#include "Chrono.h"
+#include "std_lib_facilities.h"
 
 //--------------------------------------------------------------------------------
 
@@ -106,7 +106,11 @@ public:
 		Transaction();
 	};
 
-	void add_book();
+	Library(vector<Book>books, vector<Patron>patrons, vector<Transaction>transactions);
+	Library();
+
+	void add_book(const Book& b);
+	vector<Book> get_books() const { return books; }
 
 private:
 	vector<Book>books;
