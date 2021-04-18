@@ -110,7 +110,12 @@ public:
 	Library();
 
 	void add_book(const Book& b);
-	vector<Book> get_books() const { return books; }
+	void add_patron(const Patron& p);
+	void add_transaction(const Library::Transaction& t);
+
+	vector<Book> v_get_books() const { return books; }
+	vector<Patron> v_get_patrons() const { return patrons; }
+	vector<Transaction> v_get_transactions() const { return transactions; }
 
 private:
 	vector<Book>books;
