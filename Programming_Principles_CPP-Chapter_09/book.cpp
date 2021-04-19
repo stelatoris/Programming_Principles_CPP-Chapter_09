@@ -95,10 +95,11 @@ ostream& operator<<(ostream& os, const Book& b)
 {
 	return os << "Title: " << b.title() << '\n'
 		<< "Author: " << b.author() << '\n'
-		<< "Genre: "<< b.genre() << '\n'
+		<< "Genre: " << b.genre() << '\n'
 		<< "Availability: " << b.availability() << '\n'
 		<< "ISBN: " << b.isbn() << '\n'
-		<< "---------------------------------\n";
+		<< "---------------------------\n";
+		
 }
 
 istream& operator>>(istream& is, Book& bb)
@@ -170,8 +171,39 @@ ostream& operator<<(ostream& os, const Patron& p)
 	return os << "Patron Name: " << p.name() << '\n'
 		<< "Card Number: " << p.card_num() << '\n'
 		<< "Outstanding Fees: " << p.fees() << '\n'
-		<< "---------------------------------\n";
+		<< "---------------------------\n";
+		
 }
+
+bool operator==(const Patron_name& a, const Patron_name& b)
+{
+	return a.last_name() == b.last_name();
+
+}
+
+bool operator!=(const Patron_name& a, const Patron_name b)
+{
+	return a.last_name() != b.last_name();
+}
+
+bool operator==(const Patron& a, const Patron& b)
+{
+	return a.name() == b.name()
+		&& a.card_num() == b.card_num()
+		&& a.fees() == b.fees();
+}
+
+bool operator!=(const Patron& a, const Patron& b)
+{
+	return a.name() != b.name()
+		&& a.card_num() != b.card_num()
+		&& a.fees() != b.fees();
+}
+
+//bool operator!=(const Book& a, const Book& b)
+//{
+//	return !(a == b);
+//}
 
 //-------------------------------------------
 //Transaction constructor
@@ -183,6 +215,14 @@ Library::Transaction::Transaction(Book book, Patron patron, Chrono::Date date)
 // Transactiom Default Constructor
 Library::Transaction::Transaction() : trans_book{ Book::Book() }, trans_patron{ Patron::Patron() }, trans_date{ Chrono::Date() }
 {
+}
+
+ostream& operator<<(ostream& os, const Library::Transaction& t)
+{
+	return os << t.trans_book << '\n'
+		<<  t.trans_patron << '\n'
+		<< "Date: " << t.trans_date << "\n\n";
+		
 }
 
 // Library Constructor
@@ -255,6 +295,36 @@ void Library::add_patron(const Patron& p)
 void Library::add_transaction(const Library::Transaction& t)
 {
 	transactions.push_back(t);
+}
+
+void Library::book_check_out(Book book, Patron patron, Chrono::Date date)
+{
+	bool patron_found = false;
+	for (int i = 0; i < patrons.size(); ++i) {
+		if (patron.name() == patrons[i].name()) {
+
+			patron_found = true;
+			Library::Transaction t{ book,patron, date };
+			book.check_out();
+			add_transaction(t);
+
+			for (int i = 0; i < books.size(); ++i) {
+				if (book.title() == books[i].title()) {
+					books[i] = book;
+				}
+			}
+		}
+		else {}
+	}
+	if (patron_found == false)error("patron not found.");
+	
+}
+
+string Book::print_available()
+{
+	string available{ "Available" };
+	string unavailable{ "Unavailable" };
+	if (availability() == true) return available;
 }
 
 

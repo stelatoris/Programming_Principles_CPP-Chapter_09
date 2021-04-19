@@ -33,6 +33,7 @@ public:
 	string author() const { return a; }
 	Genre genre() const { return g; }
 	bool availability() const { return available; }
+	string print_available();
 	void change_isbn(ISBN i);
 	void change_title(string s);
 	void change_author(string s);
@@ -112,10 +113,12 @@ public:
 	void add_book(const Book& b);
 	void add_patron(const Patron& p);
 	void add_transaction(const Library::Transaction& t);
+	void book_check_out(Book book, Patron patron, Chrono::Date date);
 
 	vector<Book> v_get_books() const { return books; }
 	vector<Patron> v_get_patrons() const { return patrons; }
 	vector<Transaction> v_get_transactions() const { return transactions; }
+	
 
 private:
 	vector<Book>books;
@@ -124,4 +127,5 @@ private:
 	
 };
 
+ostream& operator<<(ostream& os, const Library::Transaction& t);
 //--------------------------------------------------------------------------------
