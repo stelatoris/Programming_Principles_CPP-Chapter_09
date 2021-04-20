@@ -32,13 +32,13 @@ public:
 	string title() const { return t; }
 	string author() const { return a; }
 	Genre genre() const { return g; }
-	bool availability() const { return available; }
+	bool checked_out() const { return chk_out; }
 	string print_available();
 	void change_isbn(ISBN i);
 	void change_title(string s);
 	void change_author(string s);
-	void check_in() { available = true; }
-	void check_out() { available = false; }
+	void check_in();
+	void check_out();
 	
 
 private:
@@ -46,7 +46,7 @@ private:
 	string t;		// book title
 	string a;		// book author	
 	Genre g;		// book genre
-	bool available;	// book Check In/Out
+	bool chk_out;	// book Checked In/Out
 };
 
 ostream& operator<<(ostream& os, const Book& b);
@@ -114,6 +114,7 @@ public:
 	void add_patron(const Patron& p);
 	void add_transaction(const Library::Transaction& t);
 	void book_check_out(Book book, Patron patron, Chrono::Date date);
+	void delinquent_accounts();
 
 	vector<Book> v_get_books() const { return books; }
 	vector<Patron> v_get_patrons() const { return patrons; }

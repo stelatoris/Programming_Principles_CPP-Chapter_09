@@ -69,8 +69,8 @@ bool operator!=(const ISBN& a, const ISBN& b)
 //--------------------------------------------------------------------------------
 
 // Book class constructor
-Book::Book(ISBN isbnnum, string title, string author, Genre genre, bool available)
-	: n{ isbnnum }, t{ title }, a{ author }, g{ genre }, available{ available }
+Book::Book(ISBN isbnnum, string title, string author, Genre genre, bool chk_out)
+	: n{ isbnnum }, t{ title }, a{ author }, g{ genre }, chk_out{ chk_out }
 {
 }
 
@@ -86,7 +86,7 @@ Book::Book()
 	t{ default_book().title() },
 	a{ default_book().author() },
 	g{ default_book().genre() },
-	available{ default_book().availability() }
+	chk_out{ default_book().checked_out() }
 {
 }
 
@@ -96,7 +96,7 @@ ostream& operator<<(ostream& os, const Book& b)
 	return os << "Title: " << b.title() << '\n'
 		<< "Author: " << b.author() << '\n'
 		<< "Genre: " << b.genre() << '\n'
-		<< "Availability: " << b.availability() << '\n'
+		<< "Availability: " << b.checked_out() << '\n'
 		<< "ISBN: " << b.isbn() << '\n'
 		<< "---------------------------\n";
 		
@@ -266,6 +266,18 @@ void Book::change_author(string s)
 	a = s;
 }
 
+void Book::check_out()
+{
+	if (checked_out()) error("already checked out");
+	chk_out = true;
+}
+
+void Book::check_in()
+{
+	if (!checked_out()) error("already checked in");
+	chk_out = false;
+}
+
 void Patron::set_fee(double fee)	//sets initial fee
 {
 	l_fees = fee;
@@ -294,37 +306,63 @@ void Library::add_patron(const Patron& p)
 
 void Library::add_transaction(const Library::Transaction& t)
 {
+	
 	transactions.push_back(t);
 }
 
 void Library::book_check_out(Book book, Patron patron, Chrono::Date date)
 {
-	bool patron_found = false;
-	for (int i = 0; i < patrons.size(); ++i) {
-		if (patron.name() == patrons[i].name()) {
-
-			patron_found = true;
-			Library::Transaction t{ book,patron, date };
-			book.check_out();
-			add_transaction(t);
-
-			for (int i = 0; i < books.size(); ++i) {
-				if (book.title() == books[i].title()) {
-					books[i] = book;
-				}
-			}
-		}
-		else {}
-	}
-	if (patron_found == false)error("patron not found.");
 	
+	bool book_found = false;
+	bool no_fees = true;
+	int booknum = 0;
+
+	for (int i = 0; i < books.size(); ++i) {	// find vector index bumber of book
+		if (book == books[i]) {
+			booknum = i;
+			book_found = true;
+			break;
+		}
+	}
+	if(!book_found) error("book_check_out() book not in library");
+
+	if (books[booknum].checked_out()) error("book_check_out(): book is already checked out");	// if already checked out, error
+
+	bool patron_found = false;
+	int patron_num = 0;
+	for (int i = 0; i < patrons.size(); ++i) {		// find patron
+		if (patron.name() == patrons[i].name()) {
+			patron_found = true;
+			patron_num = i;
+			break;
+		}
+	}
+	if (!patron_found)error("book_check_out() patron not found.");
+
+	if (patrons[patron_num].fees()) error("book_check_out() patron owes fees");	// check if patron owes fees
+
+	transactions.push_back(Transaction(books[booknum], patrons[patron_num], date));
+	books[booknum].check_out();
+	patrons[patron_num].add_fee(2);
+}
+
+void Library::delinquent_accounts()
+{
+	vector<Patron>del_accounts;
+	for (int i = 0; i < patrons.size(); ++i) {
+		if (patrons[i].fees() > 0) del_accounts.push_back(patrons[i]);
+	}
+	cout << "Delinquent accounts:\n";
+	for (int i = 0; i < del_accounts.size(); ++i) {
+		cout << del_accounts[i];
+	}
 }
 
 string Book::print_available()
 {
 	string available{ "Available" };
 	string unavailable{ "Unavailable" };
-	if (availability() == true) return available;
+	if (checked_out() == true) return available;
 }
 
 

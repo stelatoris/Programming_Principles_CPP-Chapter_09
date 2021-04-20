@@ -64,57 +64,63 @@ void test_library()
 		"1984",
 		"George Orwell",
 		Genre::fiction,
-		true);			//availability
+		false);			//availability
 	test_lib.add_book(book1);
 
 	Book book2(ISBN(9780,1410,3613,'7'),
 		"Animal Farm",
 		"George Orwell",
 		Genre::fiction,
-		true);			//availability
+		false);			//availability
 	test_lib.add_book(book2);
 
 	Book book3(ISBN(9780,3161,1695,'4'),
 		"The Day the Universe Changed",
 		"James Burke",
 		Genre::nonfiction,
-		true);			//availability
+		false);			//availability
 	test_lib.add_book(book3);
 
 	Book book4(ISBN(9780,1413,7114,'6'),
 		"The BFG",
 		"Roald Dahl",
 		Genre::children,
-		true);			//availability
+		false);			//availability
 	test_lib.add_book(book4);
 
 	Book book5(ISBN(9780,3948,0001,'1'),
 		"The Cat in the Hat",
 		"Dr. Seuss",
 		Genre::children,
-		true);			//availability
+		false);			//availability
 	test_lib.add_book(book5);
 
 	Book book6(ISBN(9781,2500,4072,'5'),
 		"Neil Armstrong: A Life of Flight",
 		"Jay Barbree ",
 		Genre::biography,
-		true);			//availability
+		false);			//availability
 	test_lib.add_book(book6);
 
 	Book book7(ISBN(9781,4711,7787,'3'),
 		"First Man: The Life of Neil Armstrong",
 		"James Hansen",
 		Genre::biography,
-		true);			//availability
+		false);			//availability
 	test_lib.add_book(book7);
 
 	Book book8(ISBN(000,720,354,'3'),
 		"	The Fellowship of the Ring : The Lord of the Rings, Book 1",
 		"John R. R. Tolkien",
 		Genre::fiction,
-		true);			//availability
+		false);			//availability
 	test_lib.add_book(book8);
+
+	Book book9(ISBN(000, 0, 0, '0'),	// this book not in library, for testing errors
+		"	No book there",
+		"no name",
+		Genre::fiction,
+		false);			//availability
 
 	//Add patrons
 	Patron patron1(Patron_name("Schwarzenegger", "Arnold"),
@@ -137,15 +143,14 @@ void test_library()
 		0);				// fees
 	test_lib.add_patron(patron4);
 
-	Patron patron5(Patron_name("no", "patron"),
+	Patron patron5(Patron_name("no", "patron"),	// this patron not in library, for testing errors
 		123456789,		// card number
 		0);				// fees
 
 	print_book_list(test_lib);
 
-	test_lib.book_check_out(book6, patron2, date);
-	test_lib.book_check_out(book2, patron1, date);
-
+	test_lib.book_check_out(book1, patron2, date);
+	//test_lib.book_check_out(book2, patron3, date);
 
 	cout << "Date: " << date << '\n';
 	
@@ -154,7 +159,9 @@ void test_library()
 
 	print_book_list(test_lib);
 
-	//print_patron_list(test_lib);
+	print_patron_list(test_lib);
+
+	test_lib.delinquent_accounts();
 }
 
 void test_library2()
@@ -194,7 +201,7 @@ void test_library2()
 
 
 	cout << "Testing access to bool\n";
-	cout << test_lib2.v_get_books()[1].availability() << '\n';
+	cout << test_lib2.v_get_books()[1].checked_out() << '\n';
 	print_transaction_list(test_lib2);
 	print_book_list(test_lib2);
 }
