@@ -33,13 +33,10 @@ public:
 	string author() const { return a; }
 	Genre genre() const { return g; }
 	bool checked_out() const { return chk_out; }
+
 	string print_available();
-	void change_isbn(ISBN i);
-	void change_title(string s);
-	void change_author(string s);
 	void check_in();
-	void check_out();
-	
+	void check_out();	
 
 private:
 	ISBN n;			// book ISBN
@@ -114,7 +111,9 @@ public:
 	void add_patron(const Patron& p);
 	void add_transaction(const Library::Transaction& t);
 	void book_check_out(Book book, Patron patron, Chrono::Date date);
+	void book_check_in(Book book, Patron patron, Chrono::Date date);
 	void delinquent_accounts();
+	
 
 	vector<Book> v_get_books() const { return books; }
 	vector<Patron> v_get_patrons() const { return patrons; }

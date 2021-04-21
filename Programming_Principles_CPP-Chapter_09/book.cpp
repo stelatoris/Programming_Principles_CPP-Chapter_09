@@ -170,7 +170,7 @@ ostream& operator<<(ostream& os, const Patron& p)
 {
 	return os << "Patron Name: " << p.name() << '\n'
 		<< "Card Number: " << p.card_num() << '\n'
-		<< "Outstanding Fees: " << p.fees() << '\n'
+		<< "Outstanding Fees: $" << p.fees() << '\n'
 		<< "---------------------------\n";
 		
 }
@@ -251,21 +251,6 @@ Library::Library()
 
 //--------------------------------------------------------------------------------
 
-void Book::change_isbn(ISBN i)
-{
-	n = i;
-}
-
-void Book::change_title(string s)
-{
-	t = s;
-}
-
-void Book::change_author(string s)
-{
-	a = s;
-}
-
 void Book::check_out()
 {
 	if (checked_out()) error("already checked out");
@@ -277,6 +262,7 @@ void Book::check_in()
 	if (!checked_out()) error("already checked in");
 	chk_out = false;
 }
+//------------
 
 void Patron::set_fee(double fee)	//sets initial fee
 {
@@ -344,6 +330,36 @@ void Library::book_check_out(Book book, Patron patron, Chrono::Date date)
 	transactions.push_back(Transaction(books[booknum], patrons[patron_num], date));
 	books[booknum].check_out();
 	patrons[patron_num].add_fee(2);
+}
+
+void Library::book_check_in(Book book, Patron patron, Chrono::Date date)
+{
+	bool book_found = false;
+	int booknum = 0;
+
+	// find vector index bumber of book
+	for (int i = 0; i < books.size(); ++i) {	
+		if (book == books[i]) {
+			booknum = i;
+			book_found = true;
+			break;
+		}
+	}
+		
+	bool patron_found = false;
+	int patron_num = 0;
+	// find patron
+	for (int i = 0; i < patrons.size(); ++i) {		
+		if (patron.name() == patrons[i].name()) {
+			patron_found = true;
+			patron_num = i;
+			break;
+		}
+	}
+
+	transactions.push_back(Transaction(books[booknum], patrons[patron_num], date));
+	books[booknum].check_in();
+	patrons[patron_num].set_fee(0);		//resets all fees to zero *not best solution for now.
 }
 
 void Library::delinquent_accounts()
