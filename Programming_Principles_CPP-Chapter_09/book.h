@@ -10,7 +10,7 @@ enum class Genre {
 //--------------------------------------------------------------------------------
 
 struct ISBN {
-    ISBN(int n1, int n2, int n3, char x);        // constructor
+    ISBN(int n1, int n2, int n3, char x);        // constructor e.g ISBN 2,3,4,x
     ISBN();            // default constructor
     int n1;
     int n2;
@@ -25,14 +25,14 @@ istream& operator>>(istream& is, ISBN& nn);
 
 class Book {
 public:
-	Book(ISBN isbnnum, string title, string author, Genre genre, bool availability);			// constructor
+	Book(ISBN isbnnum, string title, string author, Genre genre, bool checked_out);			// constructor
 	Book();			// default constructor
 
 	ISBN isbn() const { return n; }
 	string title() const { return t; }
 	string author() const { return a; }
 	Genre genre() const { return g; }
-	bool checked_out() const { return chk_out; }
+	bool checked_out() const { return chk_out; }	// checkout status
 
 	string print_available();
 	void check_in();

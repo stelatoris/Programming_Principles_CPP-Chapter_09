@@ -69,8 +69,8 @@ bool operator!=(const ISBN& a, const ISBN& b)
 //--------------------------------------------------------------------------------
 
 // Book class constructor
-Book::Book(ISBN isbnnum, string title, string author, Genre genre, bool chk_out)
-	: n{ isbnnum }, t{ title }, a{ author }, g{ genre }, chk_out{ chk_out }
+Book::Book(ISBN isbnnum, string title, string author, Genre genre, bool checked_out)
+	: n{ isbnnum }, t{ title }, a{ author }, g{ genre }, chk_out{ checked_out }
 {
 }
 
@@ -114,7 +114,7 @@ istream& operator>>(istream& is, Book& bb)
 	return is;
 }
 
-// check if ISBN are same for two books
+// check if ISBN are same or not for two books
 bool operator==(const Book& a, const Book& b)
 {
 	return a.isbn() == b.isbn();
@@ -200,12 +200,7 @@ bool operator!=(const Patron& a, const Patron& b)
 		&& a.fees() != b.fees();
 }
 
-//bool operator!=(const Book& a, const Book& b)
-//{
-//	return !(a == b);
-//}
-
-//-------------------------------------------
+//-------------------------------------------------------------------------------------------
 //Transaction constructor
 Library::Transaction::Transaction(Book book, Patron patron, Chrono::Date date)
 	:trans_book{ book }, trans_patron{ patron }, trans_date{ date }
@@ -225,6 +220,7 @@ ostream& operator<<(ostream& os, const Library::Transaction& t)
 		
 }
 
+//-------------------------------------------------------------------------------------------
 // Library Constructor
 Library::Library(vector<Book>b, vector<Patron>p, vector<Transaction>t)
 	: books{ b }, patrons{ p }, transactions{ t }
@@ -250,7 +246,7 @@ Library::Library()
 }
 
 //--------------------------------------------------------------------------------
-
+// Book class functions
 void Book::check_out()
 {
 	if (checked_out()) error("already checked out");
@@ -262,8 +258,16 @@ void Book::check_in()
 	if (!checked_out()) error("already checked in");
 	chk_out = false;
 }
-//------------
 
+string Book::print_available()		// unused for now
+{
+	string available{ "Available" };
+	string unavailable{ "Unavailable" };
+	if (checked_out() == true) return available;
+}
+
+//----------------------------------------------------------------------------------
+// Patron class functions
 void Patron::set_fee(double fee)	//sets initial fee
 {
 	l_fees = fee;
@@ -280,17 +284,19 @@ bool Patron::check_fees()
 	else return false;
 }
 
-void Library::add_book(const Book& b)
+//----------------------------------------------------------------------------------
+// Library class functions
+void Library::add_book(const Book& b)		// add to books vector
 {
 	books.push_back(b);
 }
 
-void Library::add_patron(const Patron& p)
+void Library::add_patron(const Patron& p)	// add to patrons vector
 {
 	patrons.push_back(p);
 }
 
-void Library::add_transaction(const Library::Transaction& t)
+void Library::add_transaction(const Library::Transaction& t)	// add to transactions vector
 {
 	
 	transactions.push_back(t);
@@ -327,8 +333,8 @@ void Library::book_check_out(Book book, Patron patron, Chrono::Date date)
 
 	if (patrons[patron_num].fees()) error("book_check_out() patron owes fees");	// check if patron owes fees
 
-	transactions.push_back(Transaction(books[booknum], patrons[patron_num], date));
-	books[booknum].check_out();
+	transactions.push_back(Transaction(books[booknum], patrons[patron_num], date));		// add transactions to vector
+	books[booknum].check_out();		// mark as checked out
 	patrons[patron_num].add_fee(2);
 }
 
@@ -358,7 +364,7 @@ void Library::book_check_in(Book book, Patron patron, Chrono::Date date)
 	}
 
 	transactions.push_back(Transaction(books[booknum], patrons[patron_num], date));
-	books[booknum].check_in();
+	books[booknum].check_in();			// mark as checked in
 	patrons[patron_num].set_fee(0);		//resets all fees to zero *not best solution for now.
 }
 
@@ -374,12 +380,7 @@ void Library::delinquent_accounts()
 	}
 }
 
-string Book::print_available()
-{
-	string available{ "Available" };
-	string unavailable{ "Unavailable" };
-	if (checked_out() == true) return available;
-}
+
 
 
 

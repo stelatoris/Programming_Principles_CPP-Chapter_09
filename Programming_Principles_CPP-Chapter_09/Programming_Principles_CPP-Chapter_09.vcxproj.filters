@@ -35,5 +35,8 @@
     <ClInclude Include="Chrono.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="library.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
