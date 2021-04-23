@@ -68,50 +68,34 @@ bool operator!=(const ISBN& a, const ISBN& b)
 
 //--------------------------------------------------------------------------------
 
-// Book class constructor
-Book::Book(ISBN isbnnum, string title, string author, Genre genre, bool checked_out)
+ // Book class constructor
+Book::Book(const ISBN& isbnnum, const string& title, const string& author, Genre genre, bool checked_out)
 	: n{ isbnnum }, t{ title }, a{ author }, g{ genre }, chk_out{ checked_out }
 {
 }
 
 // default Book constructor
-const Book& default_book()
+
+Book::Book() : n{ ISBN() }, t{ "" }, a{ "" }, g{ Genre() }, chk_out{ false }{}
+
+
+std::string availability(bool checked_out)
 {
-	static Book bb{ ISBN(), "", "" , Genre(),  false };
-	return bb;
+	if (checked_out)
+		return "Unavailable";
+	else
+		return "Available";
 }
 
-Book::Book()
-	:n{ default_book().isbn() },
-	t{ default_book().title() },
-	a{ default_book().author() },
-	g{ default_book().genre() },
-	chk_out{ default_book().checked_out() }
-{
-}
-
-// Book cin, cout Operator overloading
 ostream& operator<<(ostream& os, const Book& b)
 {
 	return os << "Title: " << b.title() << '\n'
 		<< "Author: " << b.author() << '\n'
 		<< "Genre: " << b.genre() << '\n'
-		<< "Availability: " << b.checked_out() << '\n'
-		<< "ISBN: " << b.isbn() << '\n'
-		<< "---------------------------\n";
-		
-}
+		<< "Availability: " << availability(b.checked_out()) << '\n'
+		<< "ISBN: " << b.isbn() << '\n';
 
-istream& operator>>(istream& is, Book& bb)
-{
-	string tt, aa;
-	Genre gg{ Genre::default_genre };
-	ISBN nn;
-	bool availability;
-	is >> nn >> tt >> aa >> availability;
-	if (!is) return is;
-	bb = Book(nn, tt, aa, gg, availability);
-	return is;
+
 }
 
 // check if ISBN are same or not for two books
@@ -127,7 +111,7 @@ bool operator!=(const Book& a, const Book& b)
 
 //--------------------------------------------------------------------------------
 // Patron_name Constructor
-Patron_name::Patron_name(string last_name, string initial_name)
+Patron_name::Patron_name(const string& last_name, const string& initial_name)
 	: l_name{ last_name }, i_name{ initial_name }
 {
 }
@@ -141,28 +125,14 @@ ostream& operator<<(ostream& os, const Patron_name& pn)
 	return os << pn.last_name() << ", " << pn.initial_name() << ". ";
 }
 
-istream& operator>>(istream& is, Patron_name& pn)
-{
-	string last_name, initial_name;
-	char ch1;
-	is >> last_name >> ch1 >> initial_name;
-	if (!is) return is;
-	if (ch1 != ',') {
-		is.clear(ios_base::failbit);
-		return is;
-	}
-	pn = Patron_name(last_name, initial_name);
-	return is;
-}
-
 //--------------------------------------------------------------------------------
 // Patron Constructor
-Patron::Patron(Patron_name name, int card_num, double fees)
+Patron::Patron(const Patron_name& name, int card_num, double fees)
 	:user_n{ name }, card_n{ card_num }, l_fees{ fees }
 {
 }
 // Default Constructor
-Patron::Patron() : user_n{ Patron_name::Patron_name() }, card_n{ 0 }, l_fees{ 0 }
+Patron::Patron() : user_n{ Patron_name() }, card_n{ 0 }, l_fees{ 0 }
 {
 }
 
@@ -170,15 +140,12 @@ ostream& operator<<(ostream& os, const Patron& p)
 {
 	return os << "Patron Name: " << p.name() << '\n'
 		<< "Card Number: " << p.card_num() << '\n'
-		<< "Outstanding Fees: $" << p.fees() << '\n'
-		<< "---------------------------\n";
-		
+		<< "Outstanding Fees: $" << p.fees() << '\n';		
 }
 
 bool operator==(const Patron_name& a, const Patron_name& b)
 {
 	return a.last_name() == b.last_name();
-
 }
 
 bool operator!=(const Patron_name& a, const Patron_name b)
@@ -202,13 +169,13 @@ bool operator!=(const Patron& a, const Patron& b)
 
 //-------------------------------------------------------------------------------------------
 //Transaction constructor
-Library::Transaction::Transaction(Book book, Patron patron, Chrono::Date date)
+Library::Transaction::Transaction( const Book& book, const Patron& patron, Chrono::Date date)
 	:trans_book{ book }, trans_patron{ patron }, trans_date{ date }
 {
 }
 
 // Transactiom Default Constructor
-Library::Transaction::Transaction() : trans_book{ Book::Book() }, trans_patron{ Patron::Patron() }, trans_date{ Chrono::Date() }
+Library::Transaction::Transaction() : trans_book{ Book() }, trans_patron{ Patron() }, trans_date{ Chrono::Date() }
 {
 }
 
@@ -216,13 +183,12 @@ ostream& operator<<(ostream& os, const Library::Transaction& t)
 {
 	return os << t.trans_book << '\n'
 		<<  t.trans_patron << '\n'
-		<< "Date: " << t.trans_date << "\n\n";
-		
+		<< "Date: " << t.trans_date << "\n\n";		
 }
 
 //-------------------------------------------------------------------------------------------
 // Library Constructor
-Library::Library(vector<Book>b, vector<Patron>p, vector<Transaction>t)
+Library::Library(const vector<Book>& b, const vector<Patron>& p, const vector<Transaction>& t)
 	: books{ b }, patrons{ p }, transactions{ t }
 {
 }
@@ -244,6 +210,10 @@ Library::Library()
 	transactions{ default_library().v_get_transactions() }
 {
 }
+
+//Library::Library() : books{  Book() }, patrons{  Patron() }, transactions{  Transaction() }
+//{
+//}
 
 //--------------------------------------------------------------------------------
 // Book class functions
@@ -280,29 +250,28 @@ void Patron::add_fee(double fee)	// add fees to account
 
 bool Patron::check_fees()
 {
-	if (l_fees > 0) return true;
-	else return false;
+	return l_fees > 0;
 }
 
 //----------------------------------------------------------------------------------
 // Library class functions
-void Library::add_book(const Book& b)		// add to books vector
+void Library::add_book( const Book& b)		// add to books vector
 {
 	books.push_back(b);
 }
 
-void Library::add_patron(const Patron& p)	// add to patrons vector
+void Library::add_patron( const Patron& p)	// add to patrons vector
 {
 	patrons.push_back(p);
 }
 
-void Library::add_transaction(const Library::Transaction& t)	// add to transactions vector
+void Library::add_transaction( const Library::Transaction& t)	// add to transactions vector
 {
 	
 	transactions.push_back(t);
 }
 
-void Library::book_check_out(Book book, Patron patron, Chrono::Date date)
+void Library::book_check_out( const Book& book, const Patron& patron, Chrono::Date date)
 {
 	
 	bool book_found = false;
@@ -338,7 +307,7 @@ void Library::book_check_out(Book book, Patron patron, Chrono::Date date)
 	patrons[patron_num].add_fee(2);
 }
 
-void Library::book_check_in(Book book, Patron patron, Chrono::Date date)
+void Library::book_check_in(const Book& book, const Patron& patron, Chrono::Date date)
 {
 	bool book_found = false;
 	int booknum = 0;

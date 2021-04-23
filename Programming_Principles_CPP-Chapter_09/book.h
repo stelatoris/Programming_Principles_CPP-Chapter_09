@@ -19,24 +19,25 @@ struct ISBN {
 };
 
 ostream& operator<<(ostream& os, const ISBN& n);
-istream& operator>>(istream& is, ISBN& nn);
+istream& operator>>(istream& is, const ISBN& nn);
 
 //--------------------------------------------------------------------------------
 
 class Book {
 public:
-	Book(ISBN isbnnum, string title, string author, Genre genre, bool checked_out);			// constructor
+	Book(const ISBN& isbnnum, const string& title, const string& author, Genre genre, bool checked_out);			// constructor
 	Book();			// default constructor
 
-	ISBN isbn() const { return n; }
-	string title() const { return t; }
-	string author() const { return a; }
-	Genre genre() const { return g; }
-	bool checked_out() const { return chk_out; }	// checkout status
+	const ISBN& isbn() const { return n; } //This is a getter function. It returns ISBN member variable.
+	const string& title() const { return t; } //This is also a getter function. It returns title member variable
+	const string& author() const { return a; } //This is also a getter function. It returns author member variable.
+	Genre genre() const { return g; }          // This is also a getter function. It returns genre member variable. The reason why it returns by value is because enum class implicitly converts to int
+											   // Remember, there is no overhead for small built-in types (char, float, bool, int, float, short, double)
+	bool checked_out() const { return chk_out; }	// Also a getter. 
 
-	string print_available();
-	void check_in();
-	void check_out();	
+	string print_available(); //Not a getter function
+	void check_in();  //Not a getter function
+	void check_out();  //Not a getter function
 
 private:
 	ISBN n;			// book ISBN
@@ -47,17 +48,16 @@ private:
 };
 
 ostream& operator<<(ostream& os, const Book& b);
-istream& operator>>(istream& is, Book& bb);
 
 //--------------------------------------------------------------------------------
 
 class Patron_name {
 public:
-	Patron_name(string last_name, string initial_name);
+	Patron_name(const string& last_name, const string& initial_name);
 	Patron_name();
 
-	string last_name() const { return l_name; }
-	string initial_name() const { return i_name; }
+	const string& last_name() const { return l_name; }
+	const string& initial_name() const { return i_name; }
 private:
 	string l_name;
 	string i_name;
@@ -66,11 +66,11 @@ private:
 
 class Patron { 
 public:
-	Patron(Patron_name name, int card_num, double fees);
+	Patron(const Patron_name& name, const int card_num, double fees);
 	Patron();		// default constructor
 
-	Patron_name name() const { return user_n; }
-	int card_num() const { return card_n; }
+	const Patron_name& name() const { return user_n; }
+	const int card_num() const { return card_n; }
 	double fees() const { return l_fees; }
 	
 	bool check_fees();
@@ -87,7 +87,6 @@ private:
 
 ostream& operator<<(ostream& os, const Patron& p);
 ostream& operator<<(ostream& os, const Patron_name& pn);
-istream& operator>>(istream& is, Patron_name& pn);
 
 //--------------------------------------------------------------------------------
 
@@ -100,24 +99,24 @@ public:
 		Patron trans_patron;
 		Chrono::Date trans_date;
 
-		Transaction(Book book, Patron patron, Chrono::Date date);
+		Transaction(const Book& book, const Patron& patron, Chrono::Date date);
 		Transaction();
 	};
 
-	Library(vector<Book>books, vector<Patron>patrons, vector<Transaction>transactions);
+	Library(const vector<Book>& books, const vector<Patron>& patrons, const vector<Transaction>& transactions);
 	Library();
 
 	void add_book(const Book& b);
 	void add_patron(const Patron& p);
 	void add_transaction(const Library::Transaction& t);
-	void book_check_out(Book book, Patron patron, Chrono::Date date);
-	void book_check_in(Book book, Patron patron, Chrono::Date date);
+	void book_check_out(const Book& book, const Patron& patron, Chrono::Date date);
+	void book_check_in(const Book& book, const Patron& patron, Chrono::Date date);
 	void delinquent_accounts();
 	
 
-	vector<Book> v_get_books() const { return books; }
-	vector<Patron> v_get_patrons() const { return patrons; }
-	vector<Transaction> v_get_transactions() const { return transactions; }
+	const vector<Book>& v_get_books() const { return books; }
+	const vector<Patron>& v_get_patrons() const { return patrons; }
+	const vector<Transaction>& v_get_transactions() const { return transactions; }
 	
 
 private:

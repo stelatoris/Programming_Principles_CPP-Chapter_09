@@ -14,44 +14,44 @@ x is a digit or a letter.Store an ISBN as a string.
 #include "library.h"
 
 
-void main_menu( Library& lib, Patron p, Chrono::Date d);
-void back_to_menu( Library& lib, Patron p, Chrono::Date d);
-void login_screen( Library& lib);
+void main_menu(Library& lib, Patron p, Chrono::Date& d);
+void back_to_menu(Library& lib, Patron p, Chrono::Date& d);
+void login_screen(Library& lib);
 
-void menu_check_out( Library& lib, Patron p, Chrono::Date d)
+void menu_check_out(Library& lib, Patron p, Chrono::Date& d)
 {
 	back_to_menu(lib, p, d);
 }
 
-void menu_check_in( Library& lib, Patron p, Chrono::Date d)
+void menu_check_in(Library& lib, Patron p, Chrono::Date& d)
 {
 	back_to_menu(lib, p, d);
 }
 
-void call_book( Library& lib, Patron p, Chrono::Date d, int c)
+void call_book(Library& lib, Patron& p, Chrono::Date& d, int c)
 {
-	cout <<'\n'<< lib.v_get_books()[c-1];
-	cout<<"To check out this book enter (1) or enter (0) to return to main menu: ";
+	cout << '\n' << lib.v_get_books()[c - 1];
+	cout << "To check out this book enter (1) or enter (0) to return to main menu: ";
 	int s;
 	cin >> s;
 	if (s == 0)back_to_menu(lib, p, d);
 	if (s == 1) {
 		int indx = 0;
-		indx=lib.v_get_transactions().size();		// get size of vector before adding another index
+		indx = lib.v_get_transactions().size();		// get size of vector before adding another index
 		lib.book_check_out((lib.v_get_books()[c - 1]), p, d);	// check out book
 		cout << "\n****************************************************\n"
-			 << "***************** Book Checked Out *****************\n"
-			 << "****************************************************\n"
-			 << "Transaction number: " << indx + 1 << '\n';
+			<< "***************** Book Checked Out *****************\n"
+			<< "****************************************************\n"
+			<< "Transaction number: " << indx + 1 << '\n';
 		cout << lib.v_get_transactions()[indx];
 		back_to_menu(lib, p, d);
 	}
 }
 
-void menu_list_books( Library& lib, Patron p, Chrono::Date d)
+void menu_list_books(Library& lib, Patron& p, Chrono::Date& d)
 {
 	cout << "\n****************************************\n"
-		 << "List of books registered in the library:\n\n";
+		<< "List of books registered in the library:\n\n";
 
 	for (int i = 0; i < lib.v_get_books().size(); ++i)
 	{
@@ -62,13 +62,13 @@ void menu_list_books( Library& lib, Patron p, Chrono::Date d)
 		<< "Please enter a book (number) or enter '0' to return to main menu: ";
 	int s;
 	cin >> s;
-	if(s==0)main_menu(lib, p, d);
-	call_book(lib, p, d, s);	
+	if (s == 0)main_menu(lib, p, d);
+	call_book(lib, p, d, s);
 }
 
 
 
-void menu_list_patrons( Library& lib, Patron p, Chrono::Date d)
+void menu_list_patrons(Library& lib, Patron& p, Chrono::Date& d)
 {
 	cout << "\n******************************************\n"
 		<< "List of patrons registered in the library:\n\n";
@@ -81,7 +81,7 @@ void menu_list_patrons( Library& lib, Patron p, Chrono::Date d)
 	back_to_menu(lib, p, d);
 }
 
-void menu_list_transactions( Library& lib, Patron p, Chrono::Date d)
+void menu_list_transactions(Library& lib, Patron& p, Chrono::Date& d)
 {
 	cout << "\n***********************************************\n"
 		<< "List of transactions registered in the library:\n\n";
@@ -93,9 +93,9 @@ void menu_list_transactions( Library& lib, Patron p, Chrono::Date d)
 	back_to_menu(lib, p, d);
 }
 
-void menu_list_del_accounts( Library& lib, Patron p, Chrono::Date d)	// delinquent accounts
+void menu_list_del_accounts(Library& lib, Patron& p, Chrono::Date& d)	// delinquent accounts
 {
-		vector<Patron>del_accounts;
+	vector<Patron>del_accounts;
 	for (int i = 0; i < lib.v_get_patrons().size(); ++i) {
 		if (lib.v_get_patrons()[i].fees() > 0) del_accounts.push_back(lib.v_get_patrons()[i]);
 	}
@@ -103,11 +103,11 @@ void menu_list_del_accounts( Library& lib, Patron p, Chrono::Date d)	// delinque
 	for (int i = 0; i < del_accounts.size(); ++i) {
 		cout << del_accounts[i];
 	}
-	
+
 	back_to_menu(lib, p, d);
 }
 
-void back_to_menu( Library& lib, Patron p, Chrono::Date d)
+void back_to_menu(Library& lib, Patron p, Chrono::Date& d)
 {
 	cout << "Please press (0) to get back to menu.\n";
 	int m;
@@ -117,31 +117,31 @@ void back_to_menu( Library& lib, Patron p, Chrono::Date d)
 
 
 
-void user_number( Library& lib, int n, Chrono::Date d)
+void user_number(Library& lib, int n, Chrono::Date& d)
 {
 	switch (n) {
-		case 1:
-			main_menu(lib, lib.v_get_patrons()[n - 1], d);
-			break;
-		case 2:
-			main_menu(lib, lib.v_get_patrons()[n - 1], d);
-			break;
-		case 3:
-			main_menu(lib, lib.v_get_patrons()[n - 1], d);
-			break;
-		case 4:
-			main_menu(lib, lib.v_get_patrons()[n - 1], d);
-			break;
+	case 1:
+		main_menu(lib, lib.v_get_patrons()[n - 1], d);
+		break;
+	case 2:
+		main_menu(lib, lib.v_get_patrons()[n - 1], d);
+		break;
+	case 3:
+		main_menu(lib, lib.v_get_patrons()[n - 1], d);
+		break;
+	case 4:
+		main_menu(lib, lib.v_get_patrons()[n - 1], d);
+		break;
 	}
 }
 
-void main_menu( Library& lib, Patron p, Chrono::Date d)
+void main_menu(Library& lib, Patron p, Chrono::Date& d)
 {
 	using namespace lib;
-	cout<<"\n***************************************************************\n"
+	cout << "\n***************************************************************\n"
 		<< "***************************************************************\n"
-		<<"Account holder:\n"
-		<< p<< '\n';
+		<< "Account holder:\n"
+		<< p << '\n';
 
 	cout << "Please choose an option (number) from the following list:\n"
 		<< '\n'
@@ -154,7 +154,7 @@ void main_menu( Library& lib, Patron p, Chrono::Date d)
 
 	int choice = 0;
 	cin >> choice;
-	switch (choice){
+	switch (choice) {
 
 	case 1:
 		menu_list_books(lib, p, d);
@@ -176,7 +176,7 @@ void main_menu( Library& lib, Patron p, Chrono::Date d)
 	}
 }
 
-void login_screen( Library& lib)
+void login_screen(Library& lib)
 {
 	using namespace lib;
 	cout << "*********************************************************\n"
@@ -186,7 +186,7 @@ void login_screen( Library& lib)
 
 	for (int i = 0; i < lib.v_get_patrons().size(); ++i)
 	{
-		cout << "User "<<i+1<<'\n';
+		cout << "User " << i + 1 << '\n';
 		cout << lib.v_get_patrons()[i];
 	}
 
