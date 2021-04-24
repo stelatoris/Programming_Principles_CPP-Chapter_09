@@ -193,8 +193,13 @@ Library::Library(const vector<Book>& b, const vector<Patron>& p, const vector<Tr
 {
 }
 
+Library::Library() : books{}, patrons{}, transactions{}
+{
+}
+
+
 // Library Default Constructor
-const Library& default_library()
+/*const Library& default_library()
 {
 	vector<Book>books;
 	vector<Patron>patrons;
@@ -210,10 +215,7 @@ Library::Library()
 	transactions{ default_library().v_get_transactions() }
 {
 }
-
-//Library::Library() : books{  Book() }, patrons{  Patron() }, transactions{  Transaction() }
-//{
-//}
+*/
 
 //--------------------------------------------------------------------------------
 // Book class functions
@@ -302,9 +304,11 @@ void Library::book_check_out( const Book& book, const Patron& patron, Chrono::Da
 
 	if (patrons[patron_num].fees()) error("book_check_out() patron owes fees");	// check if patron owes fees
 
-	transactions.push_back(Transaction(books[booknum], patrons[patron_num], date));		// add transactions to vector
 	books[booknum].check_out();		// mark as checked out
 	patrons[patron_num].add_fee(2);
+	transactions.push_back(Transaction(books[booknum], patrons[patron_num], date));		// add transactions to vector
+	
+	
 }
 
 void Library::book_check_in(const Book& book, const Patron& patron, Chrono::Date date)
